@@ -3,14 +3,16 @@
 #include <vector>
 #include <Eigen/Eigen>
 
-int binomial(int c, int n) {
+int binomial(int n, int k) {
 //    if (c < 0)
 //        std::cout << "c: " << c << std::endl;
 //    if (n < 0)
 //        std::cout << "n: " << n << std::endl;
-    if (n == 0 || n == c)
+    if (k > n)
+        return 0;
+    if (k == 0 || k == n)
         return 1;
-    return binomial(c-1, n-1) + binomial(c-1, n);
+    return binomial(n-1, k-1) + binomial(n-1, k);
 }
 
 int factorial(int n) {
@@ -59,7 +61,8 @@ double k(int n, int l, int m, double alpha,
 
 double s(int ni, int li, int mi, int nj,
         int lj, int mj, double alpha, double beta, double gamma) {
-    std::cout << "ni: " << ni << " nj: " << nj << " li: " << li << " lj: " << lj << " mi: " << mi << " mj: " << mj << std::endl;
+    std::cout << "ni: " << ni << " nj: " << nj << " li: " << li << " lj: " << lj << " mi: " <<
+    mi << " mj: " << mj << std::endl;
     std::cout << "alpha: " << alpha << " beta: " << beta << " gamma: " << gamma << std::endl;
     return k(ni + nj, li + lj, mi + mj, alpha, beta, gamma);
 }
@@ -167,6 +170,19 @@ Eigen::MatrixXd h_matrix_builder(std::vector<std::pair<std::vector<int>, std::ve
     return result;
 }
 
+template<typename T,typename U>
+std::pair<T, U> hylleraas(std::vector<std::pair<std::vector<int>, std::vector<double> > > basis, int z) {
+    auto H = h_matrix_builder(basis, z);
+    auto S = s_matrix_builder(basis);
+
+    Eigen::GeneralizedEigenSolver<Eigen::MatrixXd> ges;
+    ges.compute(H,S);
+
+    Eigen::MatrixXd evecs = ges.eigenvectors().real();
+    Eigen::MatrixXd evals = ges.eigenvalues().real();
+
+}
+
 int main() {
     std::vector<std::pair<std::vector<int>, std::vector<double> > > basis =
             {std::pair<std::vector<int>, std::vector<double> >(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
@@ -175,6 +191,12 @@ int main() {
 
     Eigen::MatrixXd H = h_matrix_builder(basis, 2);
     std::cout << H << std::endl;
+
+    double k_test = k(-1, -1, -1, 0.5, 0.5, 0.5);
+    std::cout << "k(-1,-1,-1,0.5,0.5,0.5): " << k_test << std::endl;
+
+    double k_test_pfac = k_pfac(1,-1, -1, -1, 1, 1, 1);
+    std::cout << "k(1,-1,-1,-1,1,1,1): " << k_test_pfac << std::endl;
 
     return 0;
 }
