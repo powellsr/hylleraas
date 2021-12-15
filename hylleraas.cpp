@@ -9,7 +9,8 @@ int binomial(std::size_t c, std::size_t n) {
     return binomial(c-1, n-1) + binomial(c-1, n);
 }
 
-int factorial(std::size_t n) {
+int factorial(int n) {
+    assert(n >= 0);
     return (n == 1 || n == 0) ? 1 : factorial(n-1) * n;
 }
 
@@ -22,7 +23,7 @@ double k(std::size_t n, std::size_t l, std::size_t m, double alpha,
             for (std::size_t c = 0; c != m+2; ++c) {
                 sum_term += binomial(l + 1 - b + a, a) * 
                     binomial(m + 1 - c + b, b) * binomial(n + 1 - a + c, c) 
-                    / (pow(alpha + beta, l - b + a +2) 
+                    / (pow(alpha + beta, l - b + a + 2)
                     * pow(alpha + gamma, n - a + c + 2) 
                     * pow(beta + gamma, m - c + b + 2));
             }
@@ -49,8 +50,8 @@ double v_ee(std::size_t ni, std::size_t li, std::size_t mi, std::size_t nj,
     return k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma);
 }
 
-double t_e(std::size_t ni, std::size_t li, std::size_t mi, std::size_t nj, 
-        std::size_t lj, std::size_t mj, double alpha, double beta, double gamma) {
+double t_e(int ni, int li, int mi, int nj,
+           int lj, int mj, double alpha, double beta, double gamma) {
     return (alpha * alpha + beta * beta + gamma * gamma) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
         + (nj * alpha / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma) 
         + (lj * beta / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma) 
@@ -90,7 +91,7 @@ double t_e(std::size_t ni, std::size_t li, std::size_t mi, std::size_t nj,
             - k(ni + nj + 2, li + lj - 2, mi + mj - 2, alpha, beta, gamma);
 }
 
-Eigen::MatrixXd s_matrix_builder(std::vector<std::pair<std::vector<int>, std::vector<double>>> basis) {
+Eigen::MatrixXd s_matrix_builder(std::vector<std::pair<std::vector<int>, std::vector<double> > > basis) {
     Eigen::MatrixXd result;
     result.setZero(basis.size(), basis.size());
     for (std::size_t i = 0; i != basis.size(); ++i) {
@@ -105,9 +106,10 @@ Eigen::MatrixXd s_matrix_builder(std::vector<std::pair<std::vector<int>, std::ve
             result(i,j) = s(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2]);
         }
     }
+    return result;
 }
 
-Eigen::MatrixXd h_matrix_builder(std::vector<std::pair<std::vector<int>, std::vector<double>>> basis, int z) {
+Eigen::MatrixXd h_matrix_builder(std::vector<std::pair<std::vector<int>, std::vector<double> > > basis, int z) {
     Eigen::MatrixXd result;
     result.setZero(basis.size(), basis.size());
     for (std::size_t i = 0; i != basis.size(); ++i) {
@@ -124,12 +126,17 @@ Eigen::MatrixXd h_matrix_builder(std::vector<std::pair<std::vector<int>, std::ve
                 + t_e(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2]);
         }
     }
+    return result;
 }
 
 int main() {
-    std::vector<std::pair<std::vector<int>, std::vector<double>>> basis = {std::pair<std::vector<int>, std::vector<double>>{std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0}}};
+    std::vector<std::pair<std::vector<int>, std::vector<double> > > basis =
+            {std::pair<std::vector<int>, std::vector<double> >(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
     Eigen::MatrixXd S = s_matrix_builder(basis);
     std::cout << S << std::endl;
+
+    Eigen::MatrixXd H = h_matrix_builder(basis, 2);
+    std::cout << H << std::endl;
 
     return 0;
 }
