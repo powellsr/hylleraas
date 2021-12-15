@@ -183,6 +183,24 @@ std::pair<T, U> hylleraas(std::vector<std::pair<std::vector<int>, std::vector<do
 
 }
 
+std::vector<std::pair<std::vector<int>, std::vector<double> > > generate_basis(std::size_t N, double alpha, double gamma) {
+    std::vector<std::pair<std::vector<int>, std::vector<double> > > result;
+    for (int n = 0; n != N; ++n) {
+        for (int l = 0; l != (N-n); ++l) {
+            for (int m = 0; m != (N-n-l); ++m) {
+                if ((n + l + m) <= N)
+                    result.push_back(std::pair<std::vector<int>, std::vector<double>>{std::vector<int>{n,l,m}, std::vector<double>{alpha, alpha, gamma}});
+            }
+        }
+    }
+}
+
+template<typename T,typename U>
+std::pair<T, U> hylleraas_generic(int N, int z, double alpha, double gamma) {
+    auto basis = generate_basis(N, alpha, gamma);
+    auto [evecs, evals] = hylleraas<Eigen::MatrixXd, Eigen::MatrixXd>(basis, z);
+}
+
 int main() {
     std::vector<std::pair<std::vector<int>, std::vector<double> > > basis =
             {std::pair<std::vector<int>, std::vector<double> >(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
