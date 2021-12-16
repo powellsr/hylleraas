@@ -85,33 +85,33 @@ double v_ee(int ni, int li, int mi, int nj,
 
 double t_e(int ni, int li, int mi, int nj,
            int lj, int mj, double alpha, double beta, double gamma) {
-    return (alpha * alpha + beta * beta + gamma * gamma) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
-        + (nj * alpha / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma) 
-        + (lj * beta / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma) 
-        + (mj * gamma) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma) 
+    return ((alpha*2) * (alpha*2) + (beta*2) * (beta*2) + (gamma*2) * (gamma*2)) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
+        + (nj * (alpha*2) / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
+        + (lj * (beta*2) / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
+        + (mj * (gamma*2)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
 //        - (nj * (nj - 1) / 2) * k(ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
         - k_pfac((nj * (nj - 1) / 2), ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
 //        - (lj * (lj - 1) / 2) * k(ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
         - k_pfac((lj * (lj - 1) / 2), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
 //
         - k_pfac((mj * (mj - 1)), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-        + (alpha / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma) 
-        + (beta / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
-        + (gamma) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
+        + ((alpha*2) / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
+        + ((beta*2) / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
+        + ((gamma*2)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
 //        - (nj) * k(ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
         - k_pfac((nj), ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
 //        - (lj) * k(ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
         - k_pfac((lj), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
 //        - (2 * mj) * k(ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
         - k_pfac((2 * mj), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-        - (alpha * gamma / 8) * (k(ni + nj - 1, li + lj, mi + mj + 1, alpha, beta, gamma)
+        - ((alpha*2) * (gamma*2) / 8) * (k(ni + nj - 1, li + lj, mi + mj + 1, alpha, beta, gamma)
             + k(ni + nj + 1, li + lj, mi + mj - 1, alpha, beta, gamma)
             - k(ni + nj - 1, li + lj + 2, mi + mj - 1, alpha, beta, gamma))
-        - (beta * gamma / 8) * (k(ni + nj, li + lj - 1, mi + mj + 1, alpha, beta, gamma)
+        - ((beta*2) * (gamma*2) / 8) * (k(ni + nj, li + lj - 1, mi + mj + 1, alpha, beta, gamma)
             + k(ni + nj, li + lj + 2, mi + mj - 1, alpha, beta, gamma)
             - k(ni + nj + 2, li + lj - 1, mi + mj - 1, alpha, beta, gamma))
 //        + (nj * gamma / 4) * (k(ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma))
-        + (nj * gamma / 4) * (k_pfac((nj * gamma / 4), ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma)
+        + (nj * (gamma*2) / 4) * (k_pfac((nj * gamma / 4), ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma)
             + k_pfac((nj * gamma / 4), ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
             - k_pfac((nj * gamma / 4), ni + nj - 2, li + lj + 2, mi + mj - 1, alpha, beta, gamma))
 //        + (mj * alpha / 4) * (k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
@@ -167,16 +167,17 @@ Eigen::MatrixXd h_matrix_builder(std::vector<std::pair<std::vector<int>, std::ve
             std::vector<int> q_nos_i = basis[i].first;
             std::vector<double> exp_i = basis[i].second;
             std::vector<int> q_nos_j = basis[j].first;
-            result(i,j) = v_ne(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2], z)
+            result(i,j) = -1 * (v_ne(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2], z)
                 + v_ee(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2])
-                + t_e(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2]);
+                + t_e(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2]));
         }
     }
     return result;
 }
 
-template<typename T,typename U>
-std::pair<T, U> hylleraas(std::vector<std::pair<std::vector<int>, std::vector<double> > > basis, int z) {
+//template<typename T,typename U>
+//std::pair<T, U>
+std::pair<Eigen::MatrixXd, Eigen::MatrixXd> hylleraas(std::vector<std::pair<std::vector<int>, std::vector<double> > > basis, int z) {
     auto H = h_matrix_builder(basis, z);
     auto S = s_matrix_builder(basis);
 
@@ -186,6 +187,7 @@ std::pair<T, U> hylleraas(std::vector<std::pair<std::vector<int>, std::vector<do
     Eigen::MatrixXd evecs = ges.eigenvectors().real();
     Eigen::MatrixXd evals = ges.eigenvalues().real();
 
+    return std::pair(evecs, evals);
 }
 
 std::vector<std::pair<std::vector<int>, std::vector<double> > > generate_basis(std::size_t N, double alpha, double gamma) {
@@ -204,12 +206,12 @@ std::vector<std::pair<std::vector<int>, std::vector<double> > > generate_basis(s
 template<typename T,typename U>
 std::pair<T, U> hylleraas_generic(int N, int z, double alpha, double gamma) {
     auto basis = generate_basis(N, alpha, gamma);
-    auto [evecs, evals] = hylleraas<Eigen::MatrixXd, Eigen::MatrixXd>(basis, z);
+    auto [evecs, evals] = hylleraas(basis, z); //<Eigen::MatrixXd, Eigen::MatrixXd>
 }
 
 int main() {
     std::vector<std::pair<std::vector<int>, std::vector<double> > > basis =
-            {std::pair<std::vector<int>, std::vector<double> >(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
+            {std::pair(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
     Eigen::MatrixXd S = s_matrix_builder(basis);
     std::cout << "S: \n" << S << std::endl;
 
@@ -221,11 +223,22 @@ int main() {
 
 //    double k_test_pfac = k_pfac(1,0, 0, 0, 1, 1, 1);
 //    std::cout << "k(1,0,0,0,1,1,1): " << k_test_pfac << std::endl;
-    double k_test_pfac2 = k_pfac(1,0, 0, 0, 1.6875, 1.6875, 0);
-    std::cout << "k(1,0,0,0,1.6875,1.6875,0): " << k_test_pfac2 << std::endl;
+//    double k_test_pfac2 = k_pfac(1,0, 0, 0, 1.6875, 1.6875, 0);
+//    std::cout << "k(1,0,0,0,1.6875,1.6875,0): " << k_test_pfac2 << std::endl;
 
 //    int binom_test = binomial(2,1);
 //    std::cout << "binom test C(2,1)\n" << binom_test;
+
+    std::vector<std::pair<std::vector<int>, std::vector<double> > > func3_basis =
+            {std::pair(std::vector<int>{0,0,0}, std::vector<double>{1.8, 1.8, 0.0}), std::pair(std::vector{1,1,0}, std::vector{1.8, 1.8, 0.0}), std::pair(std::vector{0,0,1}, std::vector{1.8, 1.8, 0.0})};
+    Eigen::MatrixXd S_3func = s_matrix_builder(func3_basis);
+    std::cout << "S_3func: \n" << S_3func << std::endl;
+
+    Eigen::MatrixXd H_3func = h_matrix_builder(func3_basis, 2);
+    std::cout << "H_3func: \n" << H_3func << std::endl;
+
+    auto [evecs_3func, evals_3func] = hylleraas(func3_basis, 2);
+    std::cout << "3basis evecs: \n" << evecs_3func << "\n\n3basis evals: \n" << evals_3func << std::endl;
 
     return 0;
 }
