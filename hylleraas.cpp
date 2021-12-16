@@ -25,14 +25,18 @@ double k_pfac(double pfac, int n, int l, int m, double alpha,
     if (pfac == 0.0)
         return 0;
     double sum_term = 0.0;
-    for (std::size_t a = 0; a != n+2; ++a) {
-        for (std::size_t b = 0; b != l+2; ++b) {
-            for (std::size_t c = 0; c != m+2; ++c) {
-                sum_term += binomial(l + 1 - b + a, a) *
+    //std::cout << "n,l,m: " << n << "," << l << "," << m << std::endl;
+    //std::cout << "alpha: " << alpha << " beta: " << beta << " gamma: " << gamma << std::endl;
+    for (std::size_t a = 0; a != (n+2); ++a) {
+        for (std::size_t b = 0; b != (l+2); ++b) {
+            for (std::size_t c = 0; c != (m+2); ++c) {
+                double sum_term_part = binomial(l + 1 - b + a, a) *
                             binomial(m + 1 - c + b, b) * binomial(n + 1 - a + c, c)
-                            / (pow(alpha + beta, l - b + a + 2)
-                               * pow(alpha + gamma, n - a + c + 2)
-                               * pow(beta + gamma, m - c + b + 2));
+                            / (pow((alpha + beta)*2, l - b + a + 2)
+                               * pow((alpha + gamma)*2, n - a + c + 2)
+                               * pow((beta + gamma)*2, m - c + b + 2));
+                //std::cout << "a,b,c: " << a << "," << b << "," << c << " sum term contrib: " << sum_term_part << std::endl;
+                sum_term += sum_term_part;
             }
         }
     }
@@ -49,9 +53,9 @@ double k(int n, int l, int m, double alpha,
             for (std::size_t c = 0; c != m+2; ++c) {
                 sum_term += binomial(l + 1 - b + a, a) * 
                     binomial(m + 1 - c + b, b) * binomial(n + 1 - a + c, c) 
-                    / (pow(alpha + beta, l - b + a + 2)
-                    * pow(alpha + gamma, n - a + c + 2) 
-                    * pow(beta + gamma, m - c + b + 2));
+                    / (pow((alpha + beta)*2, l - b + a + 2)
+                    * pow((alpha + gamma)*2, n - a + c + 2)
+                    * pow((beta + gamma)*2, m - c + b + 2));
             }
         }
     }
@@ -61,10 +65,10 @@ double k(int n, int l, int m, double alpha,
 
 double s(int ni, int li, int mi, int nj,
         int lj, int mj, double alpha, double beta, double gamma) {
-    std::cout << "ni: " << ni << " nj: " << nj << " li: " << li << " lj: " << lj << " mi: " <<
-    mi << " mj: " << mj << std::endl;
-    std::cout << "alpha: " << alpha << " beta: " << beta << " gamma: " << gamma << std::endl;
-    return k(ni + nj, li + lj, mi + mj, alpha, beta, gamma);
+    //std::cout << "ni: " << ni << " nj: " << nj << " li: " << li << " lj: " << lj << " mi: " <<
+    //mi << " mj: " << mj << std::endl;
+    //std::cout << "alpha: " << alpha << " beta: " << beta << " gamma: " << gamma << std::endl;
+    return k_pfac(1, ni + nj, li + lj, mi + mj, alpha, beta, gamma);
 }
 
 double v_ne(int ni, int li, int mi, int nj,
@@ -144,6 +148,7 @@ Eigen::MatrixXd s_matrix_builder(std::vector<std::pair<std::vector<int>, std::ve
             std::vector<int> q_nos_i = basis[i].first;
             std::vector<double> exp_i = basis[i].second;
             std::vector<int> q_nos_j = basis[j].first;
+            //std::cout << "S(" << i << "," << j << ") = s(" << q_nos_i[0] << "," <<  q_nos_i[1] << "," << q_nos_i[2] << "," << q_nos_j[0] << "," <<  q_nos_j[1] << "," << q_nos_j[2] << "," << exp_i[0] << "," << exp_i[1] << "," << exp_i[2] << std::endl;
             result(i,j) = s(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2]);
         }
     }
@@ -211,11 +216,16 @@ int main() {
     Eigen::MatrixXd H = h_matrix_builder(basis, 2);
     std::cout << "H: \n" << H << std::endl;
 
-    double k_test = k(-1, -1, -1, 0.5, 0.5, 0.5);
-    std::cout << "k(-1,-1,-1,0.5,0.5,0.5): " << k_test << std::endl;
+//    double k_test = k(0, 0, 0, 0.5, 0.5, 0.5);
+//    std::cout << "k(-1,-1,-1,0.5,0.5,0.5): " << k_test << std::endl;
 
-    double k_test_pfac = k_pfac(1,-1, -1, -1, 1, 1, 1);
-    std::cout << "k(1,-1,-1,-1,1,1,1): " << k_test_pfac << std::endl;
+//    double k_test_pfac = k_pfac(1,0, 0, 0, 1, 1, 1);
+//    std::cout << "k(1,0,0,0,1,1,1): " << k_test_pfac << std::endl;
+    double k_test_pfac2 = k_pfac(1,0, 0, 0, 1.6875, 1.6875, 0);
+    std::cout << "k(1,0,0,0,1.6875,1.6875,0): " << k_test_pfac2 << std::endl;
+
+//    int binom_test = binomial(2,1);
+//    std::cout << "binom test C(2,1)\n" << binom_test;
 
     return 0;
 }
