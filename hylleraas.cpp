@@ -193,6 +193,7 @@ std::vector<std::pair<std::vector<int>, std::vector<double> > > generate_basis(s
             }
         }
     }
+    return result;
 }
 
 template<typename T,typename U>
@@ -205,10 +206,10 @@ int main() {
     std::vector<std::pair<std::vector<int>, std::vector<double> > > basis =
             {std::pair<std::vector<int>, std::vector<double> >(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
     Eigen::MatrixXd S = s_matrix_builder(basis);
-    std::cout << S << std::endl;
+    std::cout << "S: \n" << S << std::endl;
 
     Eigen::MatrixXd H = h_matrix_builder(basis, 2);
-    std::cout << H << std::endl;
+    std::cout << "H: \n" << H << std::endl;
 
     double k_test = k(-1, -1, -1, 0.5, 0.5, 0.5);
     std::cout << "k(-1,-1,-1,0.5,0.5,0.5): " << k_test << std::endl;
