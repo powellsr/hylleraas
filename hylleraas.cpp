@@ -217,10 +217,10 @@ int main() {
     std::vector<std::pair<std::vector<int>, std::vector<double> > > basis =
             {std::pair(std::vector<int>{0,0,0}, std::vector<double>{1.6875, 1.6875, 0.0})};
     Eigen::MatrixXd S = s_matrix_builder(basis);
-    std::cout << "S: \n" << S << std::endl;
+    std::cout << "S with single basis fn: \n" << S << std::endl;
 
     Eigen::MatrixXd H = h_matrix_builder(basis, 2);
-    std::cout << "H: \n" << H << std::endl;
+    std::cout << "H with single basis fn: \n" << H << std::endl;
 
 //    double k_test = k(0, 0, 0, 0.5, 0.5, 0.5);
 //    std::cout << "k(-1,-1,-1,0.5,0.5,0.5): " << k_test << std::endl;
@@ -244,18 +244,6 @@ int main() {
     auto [evecs_3func, evals_3func] = hylleraas(func3_basis, 2);
     std::cout << "3basis evecs: \n" << evecs_3func << "\n\n3basis evals: \n" << evals_3func << std::endl;
 
-    //He+
-//    std::vector<std::pair<std::vector<int>, std::vector<double> > > func3_basis_he_plus =
-//            {std::pair(std::vector<int>{0,0,0}, std::vector<double>{1.8, 0.0, 0.0}), std::pair(std::vector{1,1,0}, std::vector{1.8, 1.8, 0.0}), std::pair(std::vector{0,0,1}, std::vector{1.8, 1.8, 0.0})};
-//    Eigen::MatrixXd S_3func_he_plus = s_matrix_builder(func3_basis);
-//    std::cout << "S_3func he+: \n" << S_3func_he_plus << std::endl;
-//
-//    Eigen::MatrixXd H_3func_he_plus = h_matrix_builder(func3_basis_he_plus, 2);
-//    std::cout << "H_3func he+: \n" << H_3func_he_plus << std::endl;
-//
-//    auto [evecs_3func_he_plus, evals_3func_he_plus] = hylleraas(func3_basis_he_plus, 2);
-//    std::cout << "3basis evecs, he+: \n" << evecs_3func_he_plus << "\n\n3basis evals: \n" << evals_3func << std::endl;
-
     //hylleraas generic
     auto [evecs_gen_func, evals_gen_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(3, 2, 1.8, 0.0);
     std::cout << "gen basis evecs: \n" << evecs_gen_func << "\n\ngen basis evals: \n" << evals_gen_func << std::endl;
@@ -263,8 +251,7 @@ int main() {
     std::vector<double> evals; //(15);
     for (size_t i = 1; i != 16; ++i) {
         auto [evecs_gen_func, evals_gen_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(i, 2, 1.8, 0.0);
-        //std::cout << "gen basis evecs: \n" << evecs_gen_func << "\n\ngen basis evals: \n" << evals_gen_func << std::endl;
-        //evals[i] = evals_gen_func.minCoeff();
+
         evals.push_back(evals_gen_func.minCoeff());
         std::cout << "Completed " << i << "th computation: " << evals_gen_func.minCoeff() << "\n";
     }
