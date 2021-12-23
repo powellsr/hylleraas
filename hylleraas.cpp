@@ -85,55 +85,55 @@ double v_ee(int ni, int li, int mi, int nj,
 
 double t_e(int ni, int li, int mi, int nj,
            int lj, int mj, double alpha, double beta, double gamma) {
-    return -((alpha*2) * (alpha*2) + (beta*2) * (beta*2) + (gamma*2) * (gamma*2)) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
-        + (nj * (alpha*2) / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
-        + (lj * (beta*2) / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
-        + (mj * (gamma*2)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
+    return -((alpha*2.0) * (alpha*2.0) + (beta*2.0) * (beta*2.) + 2.0 * (gamma*2.0) * (gamma*2.0)) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
+        + (nj * (alpha*2.0) / 2.0) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
+        + (lj * (beta*2.0) / 2.0) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
+        + (mj * (gamma*2.0)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
 //        - (nj * (nj - 1) / 2) * k(ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
-        - k_pfac((nj * (nj - 1) / 2), ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
+        - k_pfac((nj * (nj - 1) / 2.0), ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
 //        - (lj * (lj - 1) / 2) * k(ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
-        - k_pfac((lj * (lj - 1) / 2), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
+        - k_pfac((lj * (lj - 1) / 2.0), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
 //
         - k_pfac((mj * (mj - 1)), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-        + ((alpha*2) / 2) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
-        + ((beta*2) / 2) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
-        + ((gamma*2)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
+        + ((alpha*2.0) / 2.0) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
+        + ((beta*2.0) / 2.0) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
+        + ((gamma*2.0)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
 //        - (nj) * k(ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
         - k_pfac((nj), ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
 //        - (lj) * k(ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
         - k_pfac((lj), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
 //        - (2 * mj) * k(ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-        - k_pfac((2 * mj), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-        - ((alpha*2) * (gamma*2) / 8) * (k(ni + nj - 1, li + lj, mi + mj + 1, alpha, beta, gamma)
+        - k_pfac((2.0 * mj), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
+        - ((alpha*2.0) * (gamma*2.0) / 8.0) * (k(ni + nj - 1, li + lj, mi + mj + 1, alpha, beta, gamma)
             + k(ni + nj + 1, li + lj, mi + mj - 1, alpha, beta, gamma)
             - k(ni + nj - 1, li + lj + 2, mi + mj - 1, alpha, beta, gamma))
-        - ((beta*2) * (gamma*2) / 8) * (k(ni + nj, li + lj - 1, mi + mj + 1, alpha, beta, gamma)
-            + k(ni + nj, li + lj + 2, mi + mj - 1, alpha, beta, gamma)
+        - ((beta*2.0) * (gamma*2.0) / 8.0) * (k(ni + nj, li + lj - 1, mi + mj + 1, alpha, beta, gamma)
+            + k(ni + nj, li + lj + 1, mi + mj - 1, alpha, beta, gamma)
             - k(ni + nj + 2, li + lj - 1, mi + mj - 1, alpha, beta, gamma))
 //        + (nj * gamma / 4) * (k(ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma))
-        + (k_pfac((nj * (gamma*2) / 4), ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma)
-            + k_pfac((nj * (gamma*2) / 4), ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
-            - k_pfac((nj * (gamma*2) / 4), ni + nj - 2, li + lj + 2, mi + mj - 1, alpha, beta, gamma))
+        + (k_pfac((nj * (gamma*2.0) / 4.0), ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma)
+            + k_pfac((nj * (gamma*2.0) / 4.0), ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
+            - k_pfac((nj * (gamma*2.0) / 4.0), ni + nj - 2, li + lj + 2, mi + mj - 1, alpha, beta, gamma))
 //        + (mj * alpha / 4) * (k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
-        + (k_pfac((mj * (alpha*2) / 4), ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
-            + k_pfac((mj * (alpha*2) / 4), ni + nj + 1, li + lj, mi + mj - 2, alpha, beta, gamma)
-            - k_pfac((mj * (alpha*2) / 4), ni + nj - 1, li + lj + 2, mi + mj - 2, alpha, beta, gamma))
+        + (k_pfac((mj * (alpha*2.0) / 4.0), ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
+            + k_pfac((mj * (alpha*2.0) / 4.0), ni + nj + 1, li + lj, mi + mj - 2, alpha, beta, gamma)
+            - k_pfac((mj * (alpha*2.0) / 4.0), ni + nj - 1, li + lj + 2, mi + mj - 2, alpha, beta, gamma))
 //        - (nj * mj / 2) * (k(ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma)
-        - (k_pfac((nj * mj / 2), ni + nj - 2, li + lj, mi + mj + 1, alpha, beta, gamma)
-            + k_pfac((nj * mj / 2), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-            - k_pfac((nj * mj / 2), ni + nj - 2, li + lj + 2, mi + mj - 2, alpha, beta, gamma))
+        - (k_pfac((nj * mj / 2.0), ni + nj - 2, li + lj, mi + mj, alpha, beta, gamma)
+            + k_pfac((nj * mj / 2.0), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
+            - k_pfac((nj * mj / 2.0), ni + nj - 2, li + lj + 2, mi + mj - 2, alpha, beta, gamma))
 //        + (lj * gamma / 4) * (k(ni + nj, li + lj - 2, mi + mj + 1, alpha, beta, gamma)
-          + (k_pfac((lj * (gamma*2) / 4), ni + nj, li + lj - 2, mi + mj + 1, alpha, beta, gamma)
-            + k_pfac((lj * (gamma*2) / 4), ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
-            - k_pfac((lj * (gamma*2) / 4), ni + nj + 2, li + lj - 2, mi + mj - 1, alpha, beta, gamma))
+        + (k_pfac((lj * (gamma*2.0) / 4.0), ni + nj, li + lj - 2, mi + mj + 1, alpha, beta, gamma)
+            + k_pfac((lj * (gamma*2.0) / 4.0), ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
+            - k_pfac((lj * (gamma*2.0) / 4.0), ni + nj + 2, li + lj - 2, mi + mj - 1, alpha, beta, gamma))
 //        + (mj * beta / 4) * (k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
-        + (k_pfac((mj * (beta*2) / 4), ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
-            + k_pfac((mj * (beta*2) / 4), ni + nj, li + lj + 1, mi + mj - 2, alpha, beta, gamma)
-            - k_pfac((mj * (beta*2) / 4), ni + nj + 2, li + lj - 1, mi + mj - 2, alpha, beta, gamma))
+        + (k_pfac((mj * (beta*2.0) / 4.0), ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
+            + k_pfac((mj * (beta*2.0) / 4.0), ni + nj, li + lj + 1, mi + mj - 2, alpha, beta, gamma)
+            - k_pfac((mj * (beta*2.0) / 4.0), ni + nj + 2, li + lj - 1, mi + mj - 2, alpha, beta, gamma))
 //        - (lj * mj / 2) * (k(ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
-          - (k_pfac((lj * mj / 2), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
-            + k_pfac((lj * mj / 2), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
-            - k_pfac((lj * mj / 2), ni + nj + 2, li + lj - 2, mi + mj - 2, alpha, beta, gamma));
+        - (k_pfac((lj * mj / 2.0), ni + nj, li + lj - 2, mi + mj, alpha, beta, gamma)
+            + k_pfac((lj * mj / 2.0), ni + nj, li + lj, mi + mj - 2, alpha, beta, gamma)
+            - k_pfac((lj * mj / 2.0), ni + nj + 2, li + lj - 2, mi + mj - 2, alpha, beta, gamma));
 }
 
 Eigen::MatrixXd s_matrix_builder(std::vector<std::pair<std::vector<int>, std::vector<double> > > basis) {
@@ -170,9 +170,9 @@ Eigen::MatrixXd h_matrix_builder(std::vector<std::pair<std::vector<int>, std::ve
             result(i,j) = (v_ne(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2], z)
                 + v_ee(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2])
                 + t_e(q_nos_i[0], q_nos_i[1], q_nos_i[2], q_nos_j[0], q_nos_j[1], q_nos_j[2], exp_i[0], exp_i[1], exp_i[2]));
-            if (result(i,j) == nan(0)) {
-                result(i,j) = 0;
-            }
+//            if (result(i,j) == nan(0)) {
+//                result(i,j) = 0;
+//            }
         }
     }
     return result;
@@ -248,17 +248,23 @@ int main() {
     auto [evecs_gen_func, evals_gen_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(3, 2, 1.8, 0.0);
     std::cout << "gen basis evecs: \n" << evecs_gen_func << "\n\ngen basis evals: \n" << evals_gen_func << std::endl;
 
-    std::vector<double> evals; //(15);
-    for (size_t i = 1; i != 16; ++i) {
-        auto [evecs_gen_func, evals_gen_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(i, 2, 1.8, 0.0);
+//    std::vector<double> evals; //(15);
+//    for (size_t i = 1; i != 16; ++i) {
+//        auto [evecs_gen_func, evals_gen_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(i, 2, 1.8, 0.0);
+//
+//        evals.push_back(evals_gen_func.minCoeff());
+//        std::cout << "Completed " << i << "th computation: " << evals_gen_func.minCoeff() << "\n";
+//    }
+//
+//    for (std::size_t i = 1; i != 16; ++i) {
+//        std::cout << "He energy computed with i=" << i << ": " << evals[i] << "\n";
+//    }
 
-        evals.push_back(evals_gen_func.minCoeff());
-        std::cout << "Completed " << i << "th computation: " << evals_gen_func.minCoeff() << "\n";
-    }
+    auto [evecs_7_func, evals_7_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(8, 2, 1.8, 0.0);
+    std::cout << "7-basis evecs: \n" << evecs_7_func << "\n\n7-basis evals: \n" << evals_7_func << std::endl;
 
-    for (std::size_t i = 1; i != 16; ++i) {
-        std::cout << "He energy computed with i=" << i << ": " << evals[i] << "\n";
-    }
+    auto [evecs_8_func, evals_8_func] = hylleraas_generic<Eigen::MatrixXd, Eigen::MatrixXd>(8, 2, 1.8, 0.0);
+    std::cout << "8-basis evecs: \n" << evecs_8_func << "\n\n8-basis evals: \n" << evals_8_func << std::endl;
 
     return 0;
 }
