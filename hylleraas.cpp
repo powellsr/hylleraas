@@ -85,7 +85,7 @@ double v_ee(int ni, int li, int mi, int nj,
 
 double t_e(int ni, int li, int mi, int nj,
            int lj, int mj, double alpha, double beta, double gamma) {
-    return -((alpha*2.0) * (alpha*2.0) + (beta*2.0) * (beta*2.) + 2.0 * (gamma*2.0) * (gamma*2.0)) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
+    return -((alpha*2.0) * (alpha*2.0) + (beta*2.0) * (beta*2.0) + 2.0 * (gamma*2.0) * (gamma*2.0)) * s(ni, li, mi, nj, lj, mj, alpha, beta, gamma) / 8.0
         + (nj * (alpha*2.0) / 2.0) * k(ni + nj - 1, li + lj, mi + mj, alpha, beta, gamma)
         + (lj * (beta*2.0) / 2.0) * k(ni + nj, li + lj - 1, mi + mj, alpha, beta, gamma)
         + (mj * (gamma*2.0)) * k(ni + nj, li + lj, mi + mj - 1, alpha, beta, gamma)
